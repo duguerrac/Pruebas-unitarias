@@ -1,22 +1,23 @@
-# Etapa de construcción
+# Imagen base para la etapa de compilación
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /source
 
-# Copiar los archivos de la solución y restaurar las dependencias
+# Copiar los archivos de solución y de proyecto
 COPY *.sln .
 COPY apiFestivos.*/*.csproj ./
+
+# Mover archivos .csproj a sus directorios correspondientes
 RUN for file in $(ls *.csproj); do mkdir -p ${file%.*} && mv $file ${file%.*}/; done
+
+# Restaurar las dependencias
 RUN dotnet restore
 
-# Copiar todo el código fuente y construir la solución
+# Copiar el resto del código fuente y compilar
 COPY . .
-WORKDIR /source/apiFestivos.Presentacion
-RUN dotnet publish -c Release -o /app
+RUN dotnet publish -c Release -o /app/publish
 
-# Etapa de ejecución
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+# Imagen base para la ejecución
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
-COPY --from=build /app .
-EXPOSE 5000
+COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "apiFestivos.Presentacion.dll"]
-
