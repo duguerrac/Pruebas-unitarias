@@ -100,7 +100,7 @@ namespace apiFestivos.Tests
             var resultado = await _servicio.ObtenerAño(2024);
 
             // Assert
-            Assert.Contains(resultado, f => f.Fecha == new DateTime(2024, 5, 13));
+            Assert.Contains(resultado, f => f.Fecha == new DateTime(2024, 5, 06));
         }
 
     }

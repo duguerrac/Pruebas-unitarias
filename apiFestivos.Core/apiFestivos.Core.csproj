@@ -10,4 +10,8 @@
     <ProjectReference Include="..\apiFestivos.Dominio\apiFestivos.Dominio.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Castle.Core" Version="5.1.1" />
+  </ItemGroup>
+
 </Project>
